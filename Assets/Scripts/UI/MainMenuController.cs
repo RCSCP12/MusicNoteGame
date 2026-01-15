@@ -55,8 +55,23 @@ namespace MusicNoteGame.UI
             mediumButton?.onClick.AddListener(() => SelectDifficulty(1));
             hardButton?.onClick.AddListener(() => SelectDifficulty(2));
             startButton?.onClick.AddListener(StartGame);
+            // Rename buttons to represent levels
+            SetButtonText(easyButton, "Level 1");
+            SetButtonText(mediumButton, "Level 2");
+            SetButtonText(hardButton, "Level 3");
+            
             UpdateVisuals();
             LoadHighScores();
+        }
+
+        private void SetButtonText(Button button, string text)
+        {
+            if (button == null) return;
+            var tmp = button.GetComponentInChildren<TextMeshProUGUI>();
+            if (tmp != null) { tmp.text = text; return; }
+            
+            var legacy = button.GetComponentInChildren<Text>();
+            if (legacy != null) { legacy.text = text; }
         }
 
         private void SelectClef(ClefType clef) { selectedClef = clef; UpdateVisuals(); }
