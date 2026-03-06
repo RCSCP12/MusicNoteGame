@@ -32,7 +32,19 @@ namespace MusicNoteGame.UI
             if (finalScoreText) finalScoreText.text = $"Final Score: {score}";
             if (correctText) correctText.text = $"Correct: {correct}";
             if (incorrectText) incorrectText.text = $"Incorrect: {incorrect}";
-            if (accuracyText) accuracyText.text = $"Accuracy: {accuracy:F1}%";
+
+            if (accuracyText)
+            {
+                accuracyText.text = $"Accuracy: {accuracy:F1}%";
+
+                if (accuracy >= 100f)
+                    accuracyText.color = Color.green;
+                else if (accuracy >= 80f)
+                    accuracyText.color = Color.orange;
+                else
+                    accuracyText.color = Color.red;
+            }
+
             if (streakText) streakText.text = $"Best Streak: {streak}";
             if (newHighScoreObj) newHighScoreObj.SetActive(newHighScore);
         }

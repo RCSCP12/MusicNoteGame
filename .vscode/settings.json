@@ -60,12 +60,14 @@
         "*.asset": "yaml",
         "*.meta": "yaml",
         "*.prefab": "yaml",
-        "*.unity": "yaml",
+        "yaml=======*.unity": "yaml",
+        "": ">>>>>>>97c783d33ee2dfcc10d42b6ef7fb564c7bcca458"
     },
     "explorer.fileNesting.enabled": true,
     "explorer.fileNesting.patterns": {
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "MusicNoteGame.slnx"
+    "MusicNoteGame-newfeature.slnx=======dotnet.defaultSolution": "MusicNoteGame.slnx>>>>>>>97c783d33ee2dfcc10d42b6ef7fb564c7bcca458",
+    "dotnet.defaultSolution": "MusicNoteGame-newfeature.slnx"
 }

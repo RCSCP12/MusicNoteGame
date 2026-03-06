@@ -79,3 +79,5 @@ crashlytics-build.properties
 # --- WebGL / Unity build output ---
 MusicNoteGame/
 MusicNoteGame_BurstDebugInformation_DoNotShip/
+.DS_Store
+*/.DS_Store
