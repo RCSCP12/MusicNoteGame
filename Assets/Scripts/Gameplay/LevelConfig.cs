@@ -20,6 +20,8 @@ namespace MusicNoteGame.Gameplay
         [Header("Progression")]
         public int notesToComplete = 5;
         public bool usesLedgerLines = false;
+        [Range(0f, 1f)] public float sharpProbability = 0f;
+        [Range(0f, 1f)] public float flatProbability = 0f;
 
         public List<NoteData> GetNotesForClef(ClefType clef)
         {
@@ -27,7 +29,7 @@ namespace MusicNoteGame.Gameplay
             var definitions = clef == ClefType.Treble ? trebleClefNotes : bassClefNotes;
 
             foreach (var def in definitions)
-                notes.Add(new NoteData(def.noteName, def.octave));
+                notes.Add(new NoteData(def.noteName, def.octave, def.isSharp, def.isFlat));
 
             return notes;
         }
@@ -38,5 +40,7 @@ namespace MusicNoteGame.Gameplay
     {
         public NoteName noteName;
         public int octave;
+        public bool isSharp;
+        public bool isFlat;
     }
 }

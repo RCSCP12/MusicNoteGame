@@ -16,25 +16,62 @@ namespace MusicNoteGame.UI
         [SerializeField] private TextMeshProUGUI streakText;
         [SerializeField] private GameObject newHighScoreObj;
         [SerializeField] private Button retryButton;
+        [SerializeField] private Button nextLevelButton;
         [SerializeField] private Button menuButton;
+
+        private bool initialized;
+
+        private void Initialize()
+        {
+            if (initialized) return;
+            initialized = true;
+            retryButton?.onClick.AddListener(() => { Hide(); GameManager.Instance?.RestartGame(); });
+            nextLevelButton?.onClick.AddListener(() => { Hide(); GameManager.Instance?.NextLevel(); });
+            menuButton?.onClick.AddListener(() => GameManager.Instance?.ReturnToMainMenu());
+        }
 
         private void Awake()
         {
-            retryButton?.onClick.AddListener(() => { Hide(); GameManager.Instance?.RestartGame(); });
-            menuButton?.onClick.AddListener(() => GameManager.Instance?.ReturnToMainMenu());
-            Hide();
+            Initialize();
+            // Don't hide here, as activating the GameObject synchronously calls Awake 
+            // and this would instantly re-hide the panel during Show().
         }
 
         public void Show(bool isVictory, int score, int correct, int incorrect, float accuracy, int streak, bool newHighScore)
         {
             panelRoot?.SetActive(true);
-            if (titleText) titleText.text = isVictory ? "Congratulations!" : "Game Over";
-            if (finalScoreText) finalScoreText.text = $"Final Score: {score}";
+            
+            bool isPractice = GameManager.Instance != null && GameManager.Instance.CurrentMode == GameMode.Practice;
+
+            if (titleText) 
+            {
+                if (isPractice) titleText.text = "Practice Complete!";
+                else titleText.text = isVictory ? "Congratulations!" : "Game Over";
+            }
+            
+            if (finalScoreText) 
+            {
+                finalScoreText.text = $"Final Score: {score}";
+                finalScoreText.gameObject.SetActive(!isPractice);
+            }
+            
             if (correctText) correctText.text = $"Correct: {correct}";
             if (incorrectText) incorrectText.text = $"Incorrect: {incorrect}";
             if (accuracyText) accuracyText.text = $"Accuracy: {accuracy:F1}%";
-            if (streakText) streakText.text = $"Best Streak: {streak}";
-            if (newHighScoreObj) newHighScoreObj.SetActive(newHighScore);
+            
+            if (streakText) 
+            {
+                streakText.text = $"Best Streak: {streak}";
+                streakText.gameObject.SetActive(!isPractice);
+            }
+            
+            if (newHighScoreObj) newHighScoreObj.SetActive(newHighScore && !isPractice);
+            
+            if (nextLevelButton)
+            {
+                bool showNext = isVictory && GameManager.Instance != null && GameManager.Instance.HasNextLevel();
+                nextLevelButton.gameObject.SetActive(showNext);
+            }
         }
 
         public void Hide() => panelRoot?.SetActive(false);
