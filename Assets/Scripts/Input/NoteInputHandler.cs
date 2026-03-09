@@ -7,52 +7,78 @@ namespace MusicNoteGame.Input
 {
     public class NoteInputHandler : MonoBehaviour
     {
-        public event Action<NoteName> OnNoteInput;
+        /// <summary>
+        /// Fired when the player presses a note key (A–G).
+        /// Event arguments: (NoteName note, bool isSharp, bool isFlat)
+        /// </summary>
+        public event Action<NoteName, bool, bool> OnNoteInput;
         public bool IsEnabled { get; private set; } = true;
 
+        /// <summary>True while CapsLock is held down.</summary>
+        public bool IsFlatActive => Keyboard.current.capsLockKey.isPressed;
+
+        public bool IsSharpActive => Keyboard.current.leftShiftKey.isPressed || Keyboard.current.rightShiftKey.isPressed;
+
         public void EnableInput() => IsEnabled = true;
-        public void DisableInput() => IsEnabled = false;
+        public void DisableInput()
+        {
+            IsEnabled = false;
+        }
 
         private void Update()
         {
             if (!IsEnabled) return;
 
-            // Check each note key using the new Input System
+            // Note keys A–G
             if (Keyboard.current.aKey.wasPressedThisFrame)
             {
-                OnNoteInput?.Invoke(NoteName.A);
+                FireNote(NoteName.A);
                 return;
             }
             if (Keyboard.current.bKey.wasPressedThisFrame)
             {
-                OnNoteInput?.Invoke(NoteName.B);
+                FireNote(NoteName.B);
                 return;
             }
             if (Keyboard.current.cKey.wasPressedThisFrame)
             {
-                OnNoteInput?.Invoke(NoteName.C);
+                FireNote(NoteName.C);
                 return;
             }
             if (Keyboard.current.dKey.wasPressedThisFrame)
             {
-                OnNoteInput?.Invoke(NoteName.D);
+                FireNote(NoteName.D);
                 return;
             }
             if (Keyboard.current.eKey.wasPressedThisFrame)
             {
-                OnNoteInput?.Invoke(NoteName.E);
+                FireNote(NoteName.E);
                 return;
             }
             if (Keyboard.current.fKey.wasPressedThisFrame)
             {
-                OnNoteInput?.Invoke(NoteName.F);
+                FireNote(NoteName.F);
                 return;
             }
             if (Keyboard.current.gKey.wasPressedThisFrame)
             {
-                OnNoteInput?.Invoke(NoteName.G);
+                FireNote(NoteName.G);
                 return;
             }
+        }
+
+        private void FireNote(NoteName note)
+        {
+            // Sharp is activated when holding Shift
+            bool sharp = IsSharpActive;
+            
+            // Flat is activated when holding CapsLock
+            bool flat = IsFlatActive;
+            
+            // Mutually exclusive: if holding shift to sharp, it overrides flat.
+            if (sharp && flat) flat = false;
+
+            OnNoteInput?.Invoke(note, sharp, flat);
         }
     }
 }

@@ -1,5 +1,21 @@
 {
   "dependencies": {
+    "com.antigravity.ide": {
+      "version": "file:C:/Users/ethan/Downloads/Antigravity-IDE-main/Antigravity-IDE-main",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {}
+    },
+    "com.coplaydev.unity-mcp": {
+      "version": "https://github.com/CoplayDev/unity-mcp.git?path=/MCPForUnity",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.nuget.newtonsoft-json": "3.0.2",
+        "com.unity.test-framework": "1.1.31"
+      },
+      "hash": "7615dd3b17a05c0f86b64e379c5fe187341a6e42"
+    },
     "com.unity.2d.animation": {
       "version": "13.0.2",
       "depth": 0,

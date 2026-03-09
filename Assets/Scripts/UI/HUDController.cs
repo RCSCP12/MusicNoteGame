@@ -14,6 +14,9 @@ namespace MusicNoteGame.UI
         [SerializeField] private TextMeshProUGUI streakText;
         [SerializeField] private Button backButton;
 
+        [Header("Accidental Indicator")]
+        [SerializeField] private TextMeshProUGUI accidentalIndicatorText;
+
         [Header("Level")]
         [SerializeField] private TextMeshProUGUI levelText;
         [SerializeField] private TextMeshProUGUI progressText;
@@ -29,19 +32,50 @@ namespace MusicNoteGame.UI
         [SerializeField] private TextMeshProUGUI feedbackText;
         [SerializeField] private Color correctColor = Color.green;
         [SerializeField] private Color incorrectColor = Color.red;
+        
+        [Header("Chords")]
+        [SerializeField] private TextMeshProUGUI pressedNotesText;
 
         private TimerController timerController;
         private Coroutine feedbackCoroutine;
+        private MusicNoteGame.Input.NoteInputHandler inputHandler;
 
         private void Start()
         {
             timerController = FindAnyObjectByType<TimerController>();
             if (timerController != null)
                 timerController.OnTimeUpdated += UpdateTimer;
+            
+            inputHandler = FindAnyObjectByType<MusicNoteGame.Input.NoteInputHandler>();
+
             if (feedbackText) feedbackText.gameObject.SetActive(false);
+            if (accidentalIndicatorText) accidentalIndicatorText.text = "";
             
             if (backButton != null)
                 backButton.onClick.AddListener(() => GameManager.Instance.ReturnToMainMenu());
+        }
+
+        private void Update()
+        {
+            if (accidentalIndicatorText != null && inputHandler != null && inputHandler.IsEnabled)
+            {
+                if (inputHandler.IsSharpActive)
+                {
+                    accidentalIndicatorText.text = "#";
+                }
+                else if (inputHandler.IsFlatActive)
+                {
+                    accidentalIndicatorText.text = "b";
+                }
+                else
+                {
+                    accidentalIndicatorText.text = "";
+                }
+            }
+            else if (accidentalIndicatorText != null)
+            {
+                accidentalIndicatorText.text = "";
+            }
         }
 
         private void OnDestroy()
@@ -97,6 +131,23 @@ namespace MusicNoteGame.UI
                     (playerAnswer == "Timeout" ? $"Time's up! It was {answer}" : $"Wrong! It was {answer}");
                 yield return new WaitForSeconds(1.5f);
                 feedbackText.gameObject.SetActive(false);
+            }
+        }
+
+        public void UpdatePressedNotes(System.Collections.Generic.List<NoteData> notes)
+        {
+            if (pressedNotesText != null)
+            {
+                if (notes == null || notes.Count == 0)
+                {
+                    pressedNotesText.text = "";
+                }
+                else
+                {
+                    string txt = "Pressed: ";
+                    foreach (var n in notes) txt += n.ToString() + " ";
+                    pressedNotesText.text = txt;
+                }
             }
         }
     }

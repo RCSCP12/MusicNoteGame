@@ -25,11 +25,15 @@ namespace MusicNoteGame.Gameplay
     {
         public NoteName noteName;
         public int octave;
+        public bool isSharp;
+        public bool isFlat;
 
-        public NoteData(NoteName name, int oct)
+        public NoteData(NoteName name, int oct, bool sharp = false, bool flat = false)
         {
             noteName = name;
             octave = oct;
+            isSharp = sharp;
+            isFlat = flat;
         }
 
         public int GetStaffPosition(ClefType clef)
@@ -71,19 +75,21 @@ namespace MusicNoteGame.Gameplay
 
         public override string ToString()
         {
+            if (isSharp) return $"{noteName}#{octave}";
+            if (isFlat) return $"{noteName}b{octave}";
             return $"{noteName}{octave}";
         }
 
         public override bool Equals(object obj)
         {
             if (obj is NoteData other)
-                return noteName == other.noteName && octave == other.octave;
+                return noteName == other.noteName && octave == other.octave && isSharp == other.isSharp && isFlat == other.isFlat;
             return false;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(noteName, octave);
+            return HashCode.Combine(noteName, octave, isSharp, isFlat);
         }
 
         public static NoteName KeyCodeToNoteName(KeyCode key)

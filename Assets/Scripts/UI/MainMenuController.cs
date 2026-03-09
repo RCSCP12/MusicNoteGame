@@ -21,6 +21,11 @@ namespace MusicNoteGame.UI
         [SerializeField] private Image practiceHighlight;
         [SerializeField] private Image timedHighlight;
 
+        [Header("Chords Selection")]
+        [SerializeField] private Button chordsButton;
+        [SerializeField] private Image chordsHighlight;
+        private bool chordsEnabled = false;
+
         [Header("Difficulty Selection")]
         [SerializeField] private Button easyButton;
         [SerializeField] private Button mediumButton;
@@ -43,7 +48,7 @@ namespace MusicNoteGame.UI
 
         private ClefType selectedClef = ClefType.Treble;
         private GameMode selectedMode = GameMode.TimedChallenge;
-        private int selectedDifficulty = 1; // 0=Easy, 1=Medium, 2=Hard
+        private int selectedDifficulty = 0; // 0=Easy, 1=Medium, 2=Hard
 
         private void Start()
         {
@@ -54,6 +59,7 @@ namespace MusicNoteGame.UI
             easyButton?.onClick.AddListener(() => SelectDifficulty(0));
             mediumButton?.onClick.AddListener(() => SelectDifficulty(1));
             hardButton?.onClick.AddListener(() => SelectDifficulty(2));
+            chordsButton?.onClick.AddListener(ToggleChords);
             startButton?.onClick.AddListener(StartGame);
             // Rename buttons to represent levels
             SetButtonText(easyButton, "Level 1");
@@ -77,6 +83,7 @@ namespace MusicNoteGame.UI
         private void SelectClef(ClefType clef) { selectedClef = clef; UpdateVisuals(); }
         private void SelectMode(GameMode mode) { selectedMode = mode; UpdateVisuals(); }
         private void SelectDifficulty(int diff) { selectedDifficulty = diff; UpdateVisuals(); LoadHighScores(); }
+        private void ToggleChords() { chordsEnabled = !chordsEnabled; UpdateVisuals(); }
 
         private void UpdateVisuals()
         {
@@ -84,6 +91,7 @@ namespace MusicNoteGame.UI
             if (bassHighlight) bassHighlight.color = selectedClef == ClefType.Bass ? selectedColor : unselectedColor;
             if (practiceHighlight) practiceHighlight.color = selectedMode == GameMode.Practice ? selectedColor : unselectedColor;
             if (timedHighlight) timedHighlight.color = selectedMode == GameMode.TimedChallenge ? selectedColor : unselectedColor;
+            if (chordsHighlight) chordsHighlight.color = chordsEnabled ? selectedColor : unselectedColor;
 
             // Difficulty highlights
             if (easyHighlight) easyHighlight.color = selectedDifficulty == 0 ? selectedColor : unselectedColor;
@@ -118,6 +126,7 @@ namespace MusicNoteGame.UI
             PlayerPrefs.SetInt("SelectedClef", (int)selectedClef);
             PlayerPrefs.SetInt("SelectedMode", (int)selectedMode);
             PlayerPrefs.SetInt("SelectedDifficulty", selectedDifficulty);
+            PlayerPrefs.SetInt("ChordsEnabled", chordsEnabled ? 1 : 0);
             SceneManager.LoadScene(1, LoadSceneMode.Single);
         }
     }

@@ -33,7 +33,9 @@ namespace MusicNoteGame.Core
 
         public event Action<GameState> OnStateChanged;
 
-        private NoteData currentNote;
+        private bool chordsEnabled;
+        private System.Collections.Generic.List<NoteData> currentTargetNotes = new System.Collections.Generic.List<NoteData>();
+        private System.Collections.Generic.List<NoteData> accumulatedInputs = new System.Collections.Generic.List<NoteData>();
         private int correctAnswers;
         private int notesToWin;
         private float timePerNote;
@@ -66,7 +68,9 @@ namespace MusicNoteGame.Core
             CurrentClef = clef;
             CurrentMode = mode;
             CurrentDifficulty = difficulty;
+            chordsEnabled = PlayerPrefs.GetInt("ChordsEnabled", 0) == 1;
 
+            gameOverPanel?.Hide();
             correctAnswers = 0;
             // Initialize LevelManager with the selected difficulty/level index
             levelManager.Initialize(difficulty);
@@ -75,6 +79,12 @@ namespace MusicNoteGame.Core
             // Set difficulty from Level Manager which uses LevelConfig
             notesToWin = levelManager.GetCurrentNotesToComplete();
             timePerNote = levelManager.GetCurrentTimeLimit();
+            
+            if (chordsEnabled)
+            {
+                timePerNote *= 2.0f; // Give the user more time to input multiple notes in a chord
+            }
+
             scoreManager.ResetScore();
             staffDisplay.SetClef(clef);
 
@@ -82,7 +92,7 @@ namespace MusicNoteGame.Core
             var levelConfig = levelManager.CurrentLevel;
             noteGenerator.Initialize(levelConfig, CurrentClef);
 
-            hudController?.UpdateLevel(1, 1); // Single round based on difficulty
+            hudController?.UpdateLevel(CurrentDifficulty + 1, levelManager.TotalLevels);
             hudController?.UpdateProgress(correctAnswers, notesToWin);
 
             ChangeState(GameState.Playing);
@@ -92,9 +102,13 @@ namespace MusicNoteGame.Core
         private void GenerateNewNote()
         {
             waitingForNextNote = false;
-            currentNote = noteGenerator.GenerateRandomNote();
-            noteDisplay.DisplayNote(currentNote, CurrentClef);
-            NoteAudioPlayer.Instance?.PlayNote(currentNote);
+            accumulatedInputs.Clear();
+            hudController?.UpdatePressedNotes(accumulatedInputs);
+            
+            currentTargetNotes = noteGenerator.GenerateNotes(chordsEnabled);
+            noteDisplay.DisplayNotes(currentTargetNotes, CurrentClef);
+            foreach(var note in currentTargetNotes)
+                NoteAudioPlayer.Instance?.PlayNote(note);
 
             if (CurrentMode == GameMode.TimedChallenge)
                 timerController.StartTimer(timePerNote);
@@ -102,26 +116,50 @@ namespace MusicNoteGame.Core
             inputHandler.EnableInput();
         }
 
-        private void HandleNoteInput(NoteName inputNote)
+        private void HandleNoteInput(NoteName inputNote, bool inputSharp, bool inputFlat)
         {
             if (CurrentState != GameState.Playing || waitingForNextNote) return;
 
-            inputHandler.DisableInput();
-            timerController.StopTimer();
+            string inputStr = inputNote.ToString();
+            if (inputSharp) inputStr += "#";
+            else if (inputFlat) inputStr += "b";
+            
+            Debug.Log($"[GameManager] User Input Received: {inputStr} (isSharp: {inputSharp}, isFlat: {inputFlat})");
 
-            if (inputNote == currentNote.noteName)
-                HandleCorrectAnswer();
-            else
-                HandleIncorrectAnswer(inputNote);
+            var match = currentTargetNotes.Find(n => n.noteName == inputNote && n.isSharp == inputSharp && n.isFlat == inputFlat);
+
+            if (match != null && !accumulatedInputs.Contains(match))
+            {
+                // Correct input
+                accumulatedInputs.Add(match);
+                NoteAudioPlayer.Instance?.PlayNote(match);
+                hudController?.UpdatePressedNotes(accumulatedInputs);
+                
+                if (accumulatedInputs.Count == currentTargetNotes.Count)
+                {
+                    inputHandler.DisableInput();
+                    timerController.StopTimer();
+                    HandleCorrectAnswer();
+                }
+            }
+            else if (match == null)
+            {
+                // Incorrect input (only punish if the pressed note wasn't in the chord at all)
+                inputHandler.DisableInput();
+                timerController.StopTimer();
+                HandleIncorrectAnswer(inputNote, inputSharp, inputFlat);
+            }
         }
 
         private void HandleCorrectAnswer()
         {
             correctAnswers++;
-            NoteAudioPlayer.Instance?.PlayNote(currentNote);
+            foreach(var n in currentTargetNotes) NoteAudioPlayer.Instance?.PlayNote(n);
             scoreManager.RecordCorrectAnswer(timerController.TimeRemaining, timerController.MaxTime);
             noteDisplay.ShowCorrectFeedback();
-            hudController?.ShowFeedback(true, currentNote.noteName.ToString());
+            
+            string targetStr = string.Join(" ", currentTargetNotes.ConvertAll(n => n.ToString()));
+            hudController?.ShowFeedback(true, targetStr);
             hudController?.UpdateProgress(correctAnswers, notesToWin);
 
             if (correctAnswers >= notesToWin)
@@ -142,12 +180,19 @@ namespace MusicNoteGame.Core
             ShowGameOver(true);
         }
 
-        private void HandleIncorrectAnswer(NoteName inputNote)
+        private void HandleIncorrectAnswer(NoteName inputNote, bool inputSharp, bool inputFlat)
         {
             scoreManager.RecordIncorrectAnswer();
             NoteAudioPlayer.Instance?.PlayError();
             noteDisplay.ShowIncorrectFeedback();
-            hudController?.ShowFeedback(false, currentNote.noteName.ToString(), inputNote.ToString());
+            
+            string playerAnswerStr;
+            if (inputSharp) playerAnswerStr = $"{inputNote}#";
+            else if (inputFlat) playerAnswerStr = $"{inputNote}b";
+            else playerAnswerStr = inputNote.ToString();
+            
+            string targetStr = string.Join(" ", currentTargetNotes.ConvertAll(n => n.ToString()));
+            hudController?.ShowFeedback(false, targetStr, playerAnswerStr);
             waitingForNextNote = true;
             Invoke(nameof(GenerateNewNote), feedbackDelay * 2);
         }
@@ -158,7 +203,9 @@ namespace MusicNoteGame.Core
             inputHandler.DisableInput();
             scoreManager.RecordIncorrectAnswer();
             NoteAudioPlayer.Instance?.PlayError();
-            hudController?.ShowFeedback(false, currentNote.noteName.ToString(), "Timeout");
+            
+            string targetStr = string.Join(" ", currentTargetNotes.ConvertAll(n => n.ToString()));
+            hudController?.ShowFeedback(false, targetStr, "Timeout");
             waitingForNextNote = true;
             Invoke(nameof(GenerateNewNote), feedbackDelay * 2);
         }
@@ -171,6 +218,20 @@ namespace MusicNoteGame.Core
         }
 
         public void RestartGame() => StartGame(CurrentClef, CurrentMode, CurrentDifficulty);
+        
+        public bool HasNextLevel()
+        {
+            return levelManager != null && CurrentDifficulty < levelManager.TotalLevels - 1;
+        }
+
+        public void NextLevel()
+        {
+            if (HasNextLevel())
+            {
+                StartGame(CurrentClef, CurrentMode, CurrentDifficulty + 1);
+            }
+        }
+
         public void ReturnToMainMenu() => SceneManager.LoadScene(0);
 
         private void ChangeState(GameState newState)
