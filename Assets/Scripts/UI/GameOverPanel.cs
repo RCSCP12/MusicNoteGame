@@ -72,6 +72,21 @@ namespace MusicNoteGame.UI
                 bool showNext = isVictory && GameManager.Instance != null && GameManager.Instance.HasNextLevel();
                 nextLevelButton.gameObject.SetActive(showNext);
             }
+
+            if (accuracyText)
+            {
+                accuracyText.text = $"Accuracy: {accuracy:F1}%";
+
+                if (accuracy >= 100f)
+                    accuracyText.color = Color.green;
+                else if (accuracy >= 80f)
+                    accuracyText.color = Color.orange;
+                else
+                    accuracyText.color = Color.red;
+            }
+
+            if (streakText) streakText.text = $"Best Streak: {streak}";
+            if (newHighScoreObj) newHighScoreObj.SetActive(newHighScore);
         }
 
         public void Hide() => panelRoot?.SetActive(false);
