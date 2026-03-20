@@ -1,11 +1,5 @@
 {
   "dependencies": {
-    "com.antigravity.ide": {
-      "version": "file:C:/Users/ethan/Downloads/Antigravity-IDE-main/Antigravity-IDE-main",
-      "depth": 0,
-      "source": "local",
-      "dependencies": {}
-    },
     "com.coplaydev.unity-mcp": {
       "version": "https://github.com/CoplayDev/unity-mcp.git?path=/MCPForUnity",
       "depth": 0,
