@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "com.antigravity.ide": "file:C:/Users/ethan/Downloads/Antigravity-IDE-main/Antigravity-IDE-main",
     "com.coplaydev.unity-mcp": "https://github.com/CoplayDev/unity-mcp.git?path=/MCPForUnity",
     "com.unity.2d.animation": "13.0.4",
     "com.unity.2d.aseprite": "3.0.1",
