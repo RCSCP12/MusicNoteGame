@@ -1,0 +1,12 @@
+services:
+  game:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        UNITY_LICENSE: ${UNITY_LICENSE}
+        UNITY_EMAIL: ${UNITY_EMAIL}
+        UNITY_PASSWORD: ${UNITY_PASSWORD}
+    ports:
+      - "8080:80"
+    restart: unless-stopped
