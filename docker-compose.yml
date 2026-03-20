@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        UNITY_LICENSE: ${UNITY_LICENSE}
+        UNITY_SERIAL: ${UNITY_SERIAL}
         UNITY_EMAIL: ${UNITY_EMAIL}
         UNITY_PASSWORD: ${UNITY_PASSWORD}
     ports:

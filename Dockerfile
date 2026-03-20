@@ -1,7 +1,8 @@
 # Stage 1: Build Unity WebGL project
 FROM unityci/unity:ubuntu-6000.3.9f1-webgl-3 AS builder
 
-ARG UNITY_LICENSE
+# Serial key credentials (Educational / Plus / Pro license)
+ARG UNITY_SERIAL
 ARG UNITY_EMAIL
 ARG UNITY_PASSWORD
 
@@ -10,17 +11,18 @@ WORKDIR /project
 # Copy project files (excludes Library/, Temp/, Builds/ via .dockerignore)
 COPY . .
 
-# Activate Unity license and build
-RUN echo "$UNITY_LICENSE" > /root/.local/share/unity3d/Unity/Unity_lic.ulf && \
-    unity-editor \
-      -quit \
-      -batchmode \
-      -nographics \
+# Activate license, build, then return the seat so it isn't consumed permanently
+RUN unity-editor -quit -batchmode -nographics \
+      -serial "$UNITY_SERIAL" \
+      -username "$UNITY_EMAIL" \
+      -password "$UNITY_PASSWORD" \
+      -logFile /dev/stdout && \
+    unity-editor -quit -batchmode -nographics \
       -projectPath /project \
       -buildTarget WebGL \
       -executeMethod BuildScript.BuildWebGL \
-      -logFile /dev/stdout || \
-    (cat /dev/stdout; exit 1)
+      -logFile /dev/stdout && \
+    unity-editor -quit -batchmode -nographics -returnlicense -logFile /dev/stdout
 
 # Stage 2: Serve the WebGL build with nginx
 FROM nginx:alpine
