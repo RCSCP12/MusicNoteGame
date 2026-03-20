@@ -81,3 +81,5 @@ MusicNoteGame/
 MusicNoteGame_BurstDebugInformation_DoNotShip/
 .DS_Store
 */.DS_Store
+
+.fake
