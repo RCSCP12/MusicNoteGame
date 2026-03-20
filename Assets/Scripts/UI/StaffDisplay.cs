@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -21,7 +22,7 @@ namespace MusicNoteGame.UI
         [SerializeField] private Transform ledgerLineContainer;
 
         private ClefType currentClef;
-        private GameObject[] ledgerLines = new GameObject[4];
+        private readonly List<GameObject> ledgerLines = new List<GameObject>();
 
         public float LineSpacing => lineSpacing;
 
@@ -81,18 +82,21 @@ namespace MusicNoteGame.UI
             int lineIndex = 0;
             if (staffPosition < 0)
             {
-                for (int pos = -2; pos >= staffPosition && lineIndex < ledgerLines.Length; pos -= 2)
+                for (int pos = -2; pos >= staffPosition; pos -= 2)
                     ShowLedgerLineAt(lineIndex++, pos, noteXPosition);
             }
             else if (staffPosition > 8)
             {
-                for (int pos = 10; pos <= staffPosition && lineIndex < ledgerLines.Length; pos += 2)
+                for (int pos = 10; pos <= staffPosition; pos += 2)
                     ShowLedgerLineAt(lineIndex++, pos, noteXPosition);
             }
         }
 
         private void ShowLedgerLineAt(int index, int position, float xPosition)
         {
+            while (ledgerLines.Count <= index)
+                ledgerLines.Add(null);
+
             if (ledgerLines[index] == null)
                 ledgerLines[index] = Instantiate(ledgerLinePrefab, ledgerLineContainer);
 

@@ -5,8 +5,6 @@ namespace MusicNoteGame.Gameplay
 {
     public class ScoreManager : MonoBehaviour
     {
-        public MusicNoteGame.UI.GameOverPanel gameOverPanel;
-
         public int CorrectAnswers { get; private set; }
         public int IncorrectAnswers { get; private set; }
         public int CurrentStreak { get; private set; }
@@ -42,11 +40,6 @@ namespace MusicNoteGame.Gameplay
 
             OnScoreChanged?.Invoke(TotalScore);
             OnStreakChanged?.Invoke(CurrentStreak);
-
-            if (CorrectAnswers >= 8)
-            {
-                gameOverPanel.Show(true,TotalScore,CorrectAnswers,IncorrectAnswers,GetAccuracy(),BestStreak,false);
-            }
         }
 
         public void RecordIncorrectAnswer()

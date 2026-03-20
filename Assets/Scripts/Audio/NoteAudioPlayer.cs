@@ -96,6 +96,13 @@ namespace MusicNoteGame.Audio
             }
         }
 
+        private void OnDestroy()
+        {
+            if (instance == this) instance = null;
+            for (int i = 0; i < MAX_VOICES; i++)
+                if (voices[i] != null) voices[i].isPlaying = false;
+        }
+
         private SynthVoice GetFreeVoice()
         {
             SynthVoice oldestVoice = voices[0];

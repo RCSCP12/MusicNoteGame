@@ -97,9 +97,10 @@ namespace MusicNoteGame.Gameplay
                 {
                     int targetSemitone = rootSemitone + formula.semitones[i];
                     int targetNameIndex = rootNameIndex + formula.nameSteps[i];
-                    
-                    int targetOctave = rootOctave + (targetNameIndex / 7);
-                    NoteName targetName = (NoteName)(targetNameIndex % 7);
+
+                    // Use floor division so negative indices wrap correctly
+                    int targetOctave = rootOctave + Mathf.FloorToInt(targetNameIndex / 7f);
+                    NoteName targetName = (NoteName)(((targetNameIndex % 7) + 7) % 7);
                     
                     int baseTargetSemitone = GetBaseSemitone(targetName, targetOctave);
                     int semitoneDiff = targetSemitone - baseTargetSemitone;

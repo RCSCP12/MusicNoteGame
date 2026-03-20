@@ -43,7 +43,16 @@ namespace MusicNoteGame.Gameplay
             OnLevelChanged?.Invoke(CurrentLevelIndex);
         }
 
-        public float GetCurrentTimeLimit() => CurrentLevel?.timePerNote ?? 10f;
-        public int GetCurrentNotesToComplete() => CurrentLevel?.notesToComplete ?? 5;
+        public float GetCurrentTimeLimit()
+        {
+            if (CurrentLevel == null) { Debug.LogError("LevelManager: CurrentLevel is null — no levels configured."); return 10f; }
+            return CurrentLevel.timePerNote;
+        }
+
+        public int GetCurrentNotesToComplete()
+        {
+            if (CurrentLevel == null) { Debug.LogError("LevelManager: CurrentLevel is null — no levels configured."); return 5; }
+            return CurrentLevel.notesToComplete;
+        }
     }
 }

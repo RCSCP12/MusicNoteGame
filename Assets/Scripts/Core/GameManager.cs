@@ -63,8 +63,16 @@ namespace MusicNoteGame.Core
             }
         }
 
+        private void OnDestroy()
+        {
+            if (inputHandler != null) inputHandler.OnNoteInput -= HandleNoteInput;
+            if (timerController != null) timerController.OnTimeExpired -= HandleTimeExpired;
+            CancelInvoke();
+        }
+
         public void StartGame(ClefType clef, GameMode mode, int difficulty = 1)
         {
+            CancelInvoke();
             CurrentClef = clef;
             CurrentMode = mode;
             CurrentDifficulty = difficulty;

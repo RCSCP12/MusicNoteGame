@@ -36,17 +36,21 @@ namespace MusicNoteGame.UI
         [Header("Chords")]
         [SerializeField] private TextMeshProUGUI pressedNotesText;
 
-        private TimerController timerController;
+        [Header("References")]
+        [SerializeField] private TimerController timerController;
+        [SerializeField] private MusicNoteGame.Input.NoteInputHandler inputHandler;
+
         private Coroutine feedbackCoroutine;
-        private MusicNoteGame.Input.NoteInputHandler inputHandler;
 
         private void Start()
         {
-            timerController = FindAnyObjectByType<TimerController>();
+            if (timerController == null)
+                timerController = FindAnyObjectByType<TimerController>();
             if (timerController != null)
                 timerController.OnTimeUpdated += UpdateTimer;
-            
-            inputHandler = FindAnyObjectByType<MusicNoteGame.Input.NoteInputHandler>();
+
+            if (inputHandler == null)
+                inputHandler = FindAnyObjectByType<MusicNoteGame.Input.NoteInputHandler>();
 
             if (feedbackText) feedbackText.gameObject.SetActive(false);
             if (accidentalIndicatorText) accidentalIndicatorText.text = "";
