@@ -40,6 +40,8 @@ namespace MusicNoteGame.UI
         public void Show(bool isVictory, int score, int correct, int incorrect, float accuracy, int streak, bool newHighScore)
         {
             panelRoot?.SetActive(true);
+            // Render on top of all other canvas children
+            transform.SetAsLastSibling();
             
             bool isPractice = GameManager.Instance != null && GameManager.Instance.CurrentMode == GameMode.Practice;
 
