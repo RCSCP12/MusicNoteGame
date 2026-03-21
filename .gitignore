@@ -83,3 +83,6 @@ MusicNoteGame_BurstDebugInformation_DoNotShip/
 */.DS_Store
 
 .fake
+
+# Large audio assets (too big for GitHub — import via Unity Package Manager or manually)
+Assets/Gregor\ Quendel\ -\ Classical\ Music\ -\ Collection/*.wav

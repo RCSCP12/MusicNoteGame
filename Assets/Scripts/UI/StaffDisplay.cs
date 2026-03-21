@@ -49,7 +49,7 @@ namespace MusicNoteGame.UI
                 clefText.text = clef == ClefType.Treble ? "G" : "F";
                 clefText.fontSize = 72;
                 clefText.fontStyle = TMPro.FontStyles.Bold | TMPro.FontStyles.Italic;
-                clefText.color = Color.black;
+                clefText.color = Color.white;
                 clefText.gameObject.SetActive(true);
                 if (clefImage != null) clefImage.gameObject.SetActive(false);
             }
