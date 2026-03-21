@@ -58,7 +58,11 @@ namespace MusicNoteGame.UI
             }
 
             if (correctText) correctText.text = $"<color=#aaaaaa>Correct</color>   <b><color=#66ff66>{correct}</color></b>";
-            if (incorrectText) incorrectText.text = $"<color=#aaaaaa>Incorrect</color>   <b><color=#ff6666>{incorrect}</color></b>";
+            if (incorrectText)
+            {
+                string incorrectColor = incorrect > 0 ? "#ff6666" : "#66ff66";
+                incorrectText.text = $"<color=#aaaaaa>Incorrect</color>   <b><color={incorrectColor}>{incorrect}</color></b>";
+            }
 
             if (accuracyText)
             {
