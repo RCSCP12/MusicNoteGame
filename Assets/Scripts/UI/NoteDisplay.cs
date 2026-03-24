@@ -39,8 +39,11 @@ namespace MusicNoteGame.UI
             // Pre-calculate Y positions then resolve X offsets for overlapping notes.
             // When two notes are closer vertically than the note oval's height, the
             // upper note shifts right (standard notation convention).
-            const float NoteOvalH  = 28f;
-            const float RightShift = 20f; // tight rightward shift for adjacent notes
+            // One staff step = lineSpacing / 2. Only displace when notes are a single
+            // step apart (i.e. a 2nd interval) — threshold is just above that distance.
+            float stepSize = staffDisplay.LineSpacing * 0.5f;        // 10px
+            float displacementThreshold = stepSize + 2f;             // 12px
+            const float RightShift = 20f;
 
             float baseX = noteBaseX; // always the original X, never accumulates
 
@@ -62,7 +65,7 @@ namespace MusicNoteGame.UI
             {
                 int prev = order[j - 1];
                 int curr = order[j];
-                if (Mathf.Abs(yPos[curr] - yPos[prev]) < NoteOvalH)
+                if (Mathf.Abs(yPos[curr] - yPos[prev]) < displacementThreshold)
                     xOff[curr] = xOff[prev] == 0f ? RightShift : 0f; // alternate columns
             }
 
