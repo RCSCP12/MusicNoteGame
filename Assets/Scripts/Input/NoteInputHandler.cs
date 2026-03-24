@@ -14,8 +14,8 @@ namespace MusicNoteGame.Input
         public event Action<NoteName, bool, bool> OnNoteInput;
         public bool IsEnabled { get; private set; } = true;
 
-        /// <summary>True while CapsLock is held down.</summary>
-        public bool IsFlatActive => Keyboard.current != null && Keyboard.current.capsLockKey.isPressed;
+        /// <summary>True while Space is held down.</summary>
+        public bool IsFlatActive => Keyboard.current != null && Keyboard.current.spaceKey.isPressed;
 
         public bool IsSharpActive => Keyboard.current != null && (Keyboard.current.leftShiftKey.isPressed || Keyboard.current.rightShiftKey.isPressed);
 
