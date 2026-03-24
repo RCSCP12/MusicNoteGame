@@ -46,8 +46,8 @@ namespace MusicNoteGame.UI
         [SerializeField] private TextMeshProUGUI bassHighScoreText;
 
         [Header("Colors")]
-        [SerializeField] private Color selectedColor = new Color(0.4f, 0.8f, 0.4f);
-        [SerializeField] private Color unselectedColor = new Color(0.6f, 0.6f, 0.6f);
+        [SerializeField] private Color selectedColor = new Color(0.25f, 0.75f, 0.85f);
+        [SerializeField] private Color unselectedColor = new Color(0.28f, 0.3f, 0.38f);
 
         private ClefType selectedClef = ClefType.Treble;
         private GameMode selectedMode = GameMode.TimedChallenge;
@@ -107,7 +107,7 @@ namespace MusicNoteGame.UI
                 if (levelConfigs != null && selectedDifficulty < levelConfigs.Length && levelConfigs[selectedDifficulty] != null)
                 {
                     var cfg = levelConfigs[selectedDifficulty];
-                    difficultyDescText.text = $"{cfg.levelName}: {cfg.notesToComplete} notes, {cfg.timePerNote:0} sec timer";
+                    difficultyDescText.text = $"<color=#7CA0BC>{cfg.levelName}</color>  ·  <b>{cfg.notesToComplete}</b> notes  ·  <b>{cfg.timePerNote:0}s</b> per note";
                 }
                 else
                 {
@@ -118,8 +118,8 @@ namespace MusicNoteGame.UI
 
         private void LoadHighScores()
         {
-            if (trebleHighScoreText) trebleHighScoreText.text = $"High Score: {PlayerPrefs.GetInt(PlayerPrefsKeys.HighScore(ClefType.Treble, selectedDifficulty), 0)}";
-            if (bassHighScoreText) bassHighScoreText.text = $"High Score: {PlayerPrefs.GetInt(PlayerPrefsKeys.HighScore(ClefType.Bass, selectedDifficulty), 0)}";
+            if (trebleHighScoreText) trebleHighScoreText.text = $"<color=#7CA0BC>Treble Best</color>  <b>{PlayerPrefs.GetInt(PlayerPrefsKeys.HighScore(ClefType.Treble, selectedDifficulty), 0)}</b>";
+            if (bassHighScoreText) bassHighScoreText.text = $"<color=#7CA0BC>Bass Best</color>  <b>{PlayerPrefs.GetInt(PlayerPrefsKeys.HighScore(ClefType.Bass, selectedDifficulty), 0)}</b>";
         }
 
         public void StartGame()

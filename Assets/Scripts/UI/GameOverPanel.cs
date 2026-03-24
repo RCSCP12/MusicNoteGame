@@ -53,27 +53,27 @@ namespace MusicNoteGame.UI
             
             if (finalScoreText)
             {
-                finalScoreText.text = $"<color=#aaaaaa>Final Score</color>   <b>{score}</b>";
+                finalScoreText.text = $"<color=#7CA0BC>FINAL SCORE</color>\n<size=+10><b>{score}</b></size>";
                 finalScoreText.gameObject.SetActive(!isPractice);
             }
 
-            if (correctText) correctText.text = $"<color=#aaaaaa>Correct</color>   <b><color=#66ff66>{correct}</color></b>";
+            if (correctText) correctText.text = $"<color=#7CA0BC>CORRECT</color>   <b><color=#5DEA80>{correct}</color></b>";
             if (incorrectText)
             {
-                string incorrectColor = incorrect > 0 ? "#ff6666" : "#66ff66";
-                incorrectText.text = $"<color=#aaaaaa>Incorrect</color>   <b><color={incorrectColor}>{incorrect}</color></b>";
+                string incorrectColor = incorrect > 0 ? "#FF6B6B" : "#5DEA80";
+                incorrectText.text = $"<color=#7CA0BC>INCORRECT</color>   <b><color={incorrectColor}>{incorrect}</color></b>";
             }
 
             if (accuracyText)
             {
-                string accuracyColor = accuracy >= 100f ? "#66ff66" : accuracy >= 80f ? "#ffdd44" : "#ff6666";
-                accuracyText.text = $"<color=#aaaaaa>Accuracy</color>   <b><color={accuracyColor}>{accuracy:F1}%</color></b>";
+                string accuracyColor = accuracy >= 100f ? "#5DEA80" : accuracy >= 80f ? "#FFD060" : "#FF6B6B";
+                accuracyText.text = $"<color=#7CA0BC>ACCURACY</color>   <b><color={accuracyColor}>{accuracy:F1}%</color></b>";
                 accuracyText.color = Color.white;
             }
 
             if (streakText)
             {
-                streakText.text = $"<color=#aaaaaa>Best Streak</color>   <b>{streak}</b>";
+                streakText.text = $"<color=#7CA0BC>BEST STREAK</color>   <b>{streak}</b>";
                 streakText.gameObject.SetActive(!isPractice);
             }
 

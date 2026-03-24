@@ -25,14 +25,14 @@ namespace MusicNoteGame.UI
         [Header("Timer")]
         [SerializeField] private Slider timerBar;
         [SerializeField] private Image timerFill;
-        [SerializeField] private Color normalColor = Color.green;
-        [SerializeField] private Color warningColor = Color.red;
+        [SerializeField] private Color normalColor = new Color(0.3f, 0.85f, 0.45f);
+        [SerializeField] private Color warningColor = new Color(1f, 0.45f, 0.1f);
         [SerializeField] [Range(0f, 1f)] private float warningThreshold = 0.3f;
 
         [Header("Feedback")]
         [SerializeField] private TextMeshProUGUI feedbackText;
-        [SerializeField] private Color correctColor = Color.green;
-        [SerializeField] private Color incorrectColor = Color.red;
+        [SerializeField] private Color correctColor = new Color(0.3f, 0.85f, 0.45f);
+        [SerializeField] private Color incorrectColor = new Color(1f, 0.35f, 0.35f);
         
         [Header("Chords")]
         [SerializeField] private TextMeshProUGUI pressedNotesText;
@@ -91,22 +91,22 @@ namespace MusicNoteGame.UI
 
         public void UpdateScore(int score)
         {
-            if (scoreText) scoreText.text = $"Score: {score}";
+            if (scoreText) scoreText.text = $"<color=#7CA0BC>SCORE</color>  <b>{score}</b>";
         }
 
         public void UpdateStreak(int streak)
         {
-            if (streakText) streakText.text = streak > 0 ? $"Streak: {streak}" : "";
+            if (streakText) streakText.text = streak > 0 ? $"<color=#FFD060>★  {streak} streak</color>" : "";
         }
 
         public void UpdateLevel(int current, int total)
         {
-            if (levelText) levelText.text = $"Level {current}/{total}";
+            if (levelText) levelText.text = $"<color=#7CA0BC>LEVEL</color>  <b>{current} / {total}</b>";
         }
 
         public void UpdateProgress(int current, int total)
         {
-            if (progressText) progressText.text = $"{current}/{total}";
+            if (progressText) progressText.text = $"<b>{current}</b><color=#888888> / {total}</color>";
             if (progressBar) { progressBar.maxValue = total; progressBar.value = current; }
         }
 
@@ -132,8 +132,8 @@ namespace MusicNoteGame.UI
             {
                 feedbackText.gameObject.SetActive(true);
                 feedbackText.color = correct ? correctColor : incorrectColor;
-                feedbackText.text = correct ? $"Correct! {answer}" :
-                    (playerAnswer == "Timeout" ? $"Time's up! It was {answer}" : $"Wrong! It was {answer}");
+                feedbackText.text = correct ? $"<b>{answer}</b>" :
+                    (playerAnswer == "Timeout" ? $"Time's up — <b>{answer}</b>" : $"It was <b>{answer}</b>");
                 yield return new WaitForSeconds(1.5f);
                 feedbackText.gameObject.SetActive(false);
             }
