@@ -17,10 +17,13 @@ namespace MusicNoteGame.UI
         private List<NoteData> currentNotes = new List<NoteData>();
         private List<GameObject> clonedNotes = new List<GameObject>();
 
+        private float noteBaseX;
+
         private void Awake()
         {
             if (noteTransform == null) noteTransform = GetComponent<RectTransform>();
             if (noteImage == null) noteImage = GetComponent<Image>();
+            noteBaseX = noteTransform != null ? noteTransform.anchoredPosition.x : 0f;
         }
 
         public void DisplayNotes(List<NoteData> notes, ClefType clef)
@@ -37,10 +40,9 @@ namespace MusicNoteGame.UI
             // When two notes are closer vertically than the note oval's height, the
             // upper note shifts right (standard notation convention).
             const float NoteOvalH  = 28f;
-            const float NoteOvalW  = 40f;
-            const float RightShift = NoteOvalW + 4f; // pixels to shift a displaced note
+            const float RightShift = 20f; // tight rightward shift for adjacent notes
 
-            float baseX = noteTransform.anchoredPosition.x;
+            float baseX = noteBaseX; // always the original X, never accumulates
 
             float[] yPos = new float[notes.Count];
             int[]   staffPos = new int[notes.Count];
