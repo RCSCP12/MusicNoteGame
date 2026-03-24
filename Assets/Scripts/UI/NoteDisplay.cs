@@ -75,9 +75,24 @@ namespace MusicNoteGame.UI
 
                 if (targetAccidental != null)
                 {
-                    if (note.isSharp) { targetAccidental.text = "#"; targetAccidental.gameObject.SetActive(true); }
-                    else if (note.isFlat) { targetAccidental.text = "b"; targetAccidental.gameObject.SetActive(true); }
-                    else { targetAccidental.gameObject.SetActive(false); }
+                    if (note.isSharp || note.isFlat)
+                    {
+                        targetAccidental.text = note.isSharp ? "♯" : "♭";
+                        targetAccidental.fontSize = 28;
+                        targetAccidental.color = new Color(0.91f, 0.91f, 0.94f);
+                        targetAccidental.alignment = TMPro.TextAlignmentOptions.Center;
+
+                        // Position to the left of the note head (key-signature style)
+                        var accRT = targetAccidental.rectTransform;
+                        accRT.anchoredPosition = new Vector2(-35f, 0f);
+                        accRT.sizeDelta = new Vector2(24f, 36f);
+
+                        targetAccidental.gameObject.SetActive(true);
+                    }
+                    else
+                    {
+                        targetAccidental.gameObject.SetActive(false);
+                    }
                 }
 
                 StartCoroutine(AppearAnimation(targetImage, targetTransform));
