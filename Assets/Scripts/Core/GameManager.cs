@@ -93,6 +93,7 @@ namespace MusicNoteGame.Core
             chordsEnabled = PlayerPrefs.GetInt(PlayerPrefsKeys.ChordsEnabled, 0) == 1;
 
             gameOverPanel?.Hide();
+            hudController?.gameObject.SetActive(true);
             noteDisplay?.gameObject.SetActive(true);
             correctAnswers = 0;
             // Initialize LevelManager with the selected difficulty/level index
@@ -246,6 +247,7 @@ namespace MusicNoteGame.Core
         {
             // Clear gameplay UI elements before showing the overlay
             noteDisplay?.gameObject.SetActive(false);
+            hudController?.gameObject.SetActive(false);
             hudController?.UpdatePressedNotes(null);
 
             bool isNewHighScore = scoreManager.SaveHighScoreIfBetter(CurrentClef, CurrentDifficulty);

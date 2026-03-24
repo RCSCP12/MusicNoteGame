@@ -14,7 +14,7 @@ public class ApplyDAWTheme : Editor
     // ── Palette ────────────────────────────────────────────────────────────────
     static readonly Color BG          = Hex("#0F0F14"); // deep near-black
     static readonly Color Panel       = Hex("#181820"); // background panel
-    static readonly Color Card        = Hex("#1E1E2A"); // elevated surface
+    static readonly Color Card        = Hex("#282840"); // elevated surface
     static readonly Color Elevated    = Hex("#252535"); // buttons / cards
     static readonly Color BorderColor = Hex("#353548"); // subtle border tint
     static readonly Color Accent      = Hex("#4B9EFF"); // Logic Pro blue
@@ -59,8 +59,8 @@ public class ApplyDAWTheme : Editor
             if (img.name.StartsWith("LedgerLine") || img.name == "LedgerLinePrefab")
                 img.color = StaffLine;
 
-        // Clef image placeholder
-        SetImageColor("ClefImage", new Color(0.69f, 0.69f, 0.78f));
+        // Clef image — must be white so the transparent-bg sprite renders without a tinted background
+        SetImageColor("ClefImage", Color.white);
 
         // Note head
         SetImageColor("Note", NoteWhite);
