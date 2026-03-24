@@ -8,12 +8,13 @@ namespace MusicNoteGame.UI
     {
         [SerializeField] private int noteWidth = 40;
         [SerializeField] private int noteHeight = 28;
+        [SerializeField] private Color noteColor = Color.white;
 
         private void Awake()
         {
             var image = GetComponent<Image>();
             image.sprite = CreateOvalSprite(noteWidth, noteHeight);
-            image.color = Color.black;
+            image.color = noteColor;
         }
 
         private Sprite CreateOvalSprite(int width, int height)

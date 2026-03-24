@@ -30,7 +30,7 @@ namespace MusicNoteGame.UI
 
             clefText.fontSize = 72;
             clefText.alignment = TextAlignmentOptions.Center;
-            clefText.color = Color.black;
+            clefText.color = new Color(0.91f, 0.91f, 0.94f); // near-white for dark theme
         }
 
         public void SetClef(ClefType clef)
