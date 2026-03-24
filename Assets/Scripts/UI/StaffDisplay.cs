@@ -30,6 +30,12 @@ namespace MusicNoteGame.UI
         {
             currentClef = clef;
 
+            // Auto-find child references if not wired in Inspector
+            if (clefImage == null)
+                clefImage = transform.Find("ClefImage")?.GetComponent<Image>();
+            if (clefText == null)
+                clefText = transform.Find("ClefText")?.GetComponent<TextMeshProUGUI>();
+
             // Try load sprites if not assigned
             if (trebleClefSprite == null) trebleClefSprite = LoadSprite("Sprites/TrebleClef");
             if (bassClefSprite == null) bassClefSprite = LoadSprite("Sprites/BassClef");
@@ -38,8 +44,9 @@ namespace MusicNoteGame.UI
 
             if (targetSprite != null && clefImage != null)
             {
-                // Use Sprite
+                // Use Sprite — white color so transparent-bg sprite renders without a tinted box
                 clefImage.sprite = targetSprite;
+                clefImage.color = Color.white;
                 clefImage.gameObject.SetActive(true);
                 if (clefText != null) clefText.gameObject.SetActive(false);
             }

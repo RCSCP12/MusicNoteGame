@@ -78,21 +78,16 @@ namespace MusicNoteGame.Audio
                 audioSource.clip = AudioClip.Create("ProceduralTone", 44100, 1, 44100, false);
             }
             
-            audioSource.Stop(); 
             sampleRate = AudioSettings.outputSampleRate;
 
             for (int i = 0; i < MAX_VOICES; i++)
             {
                 voices[i] = new SynthVoice();
             }
-        }
 
-        private void Start()
-        {
-            if (!audioSource.isPlaying)
-            {
-                audioSource.Play();
-            }
+            // Start playing immediately in Awake so OnAudioFilterRead fires
+            // even when PlayNote() is called before Start() runs (e.g. lazy-init).
+            audioSource.Play();
         }
 
         private void OnDestroy()
