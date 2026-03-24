@@ -123,6 +123,10 @@ namespace MusicNoteGame.Core
             hudController?.UpdateLevel(CurrentDifficulty + 1, levelManager.TotalLevels);
             hudController?.UpdateProgress(correctAnswers, notesToWin);
 
+            // Deselect any focused UI element so Space (flat modifier) doesn't
+            // trigger EventSystem Submit on buttons during gameplay.
+            UnityEngine.EventSystems.EventSystem.current?.SetSelectedGameObject(null);
+
             ChangeState(GameState.Playing);
             GenerateNewNote();
         }

@@ -77,7 +77,9 @@ namespace MusicNoteGame.UI
                 {
                     if (note.isSharp || note.isFlat)
                     {
-                        targetAccidental.text = note.isSharp ? "♯" : "♭";
+                        // ♯/♭ are outside the default TMP atlas; use ASCII # and italic b instead.
+                        targetAccidental.richText = true;
+                        targetAccidental.text = note.isSharp ? "#" : "<i>b</i>";
                         targetAccidental.fontSize = 28;
                         targetAccidental.color = new Color(0.91f, 0.91f, 0.94f);
                         targetAccidental.alignment = TMPro.TextAlignmentOptions.Center;

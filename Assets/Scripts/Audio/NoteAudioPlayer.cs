@@ -8,7 +8,21 @@ namespace MusicNoteGame.Audio
     public class NoteAudioPlayer : MonoBehaviour
     {
         private static NoteAudioPlayer instance;
-        public static NoteAudioPlayer Instance => instance;
+        public static NoteAudioPlayer Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    // Auto-create if not yet spawned (e.g. starting from Game scene in editor).
+                    // Awake runs synchronously inside AddComponent, so instance is set before
+                    // we return — no race condition with a scene-placed instance.
+                    var go = new GameObject("[NoteAudioPlayer]");
+                    go.AddComponent<NoteAudioPlayer>(); // Awake sets instance + DontDestroyOnLoad
+                }
+                return instance;
+            }
+        }
 
         [SerializeField] private float volume = 0.5f;
         [SerializeField] private float duration = 0.5f;

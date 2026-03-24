@@ -66,11 +66,11 @@ namespace MusicNoteGame.UI
             {
                 if (inputHandler.IsSharpActive)
                 {
-                    accidentalIndicatorText.text = "♯";
+                    accidentalIndicatorText.text = "#";
                 }
                 else if (inputHandler.IsFlatActive)
                 {
-                    accidentalIndicatorText.text = "♭";
+                    accidentalIndicatorText.text = "b";
                 }
                 else
                 {

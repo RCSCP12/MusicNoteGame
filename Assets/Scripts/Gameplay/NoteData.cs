@@ -75,8 +75,8 @@ namespace MusicNoteGame.Gameplay
 
         public override string ToString()
         {
-            if (isSharp) return $"{noteName}♯{octave}";
-            if (isFlat) return $"{noteName}♭{octave}";
+            if (isSharp) return $"{noteName}#{octave}";
+            if (isFlat) return $"{noteName}b{octave}";
             return $"{noteName}{octave}";
         }
 
