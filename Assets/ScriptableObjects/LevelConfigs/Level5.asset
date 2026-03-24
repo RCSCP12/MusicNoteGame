@@ -17,57 +17,111 @@ MonoBehaviour:
   trebleClefNotes:
   - noteName: 0
     octave: 4
+    isSharp: 0
+    isFlat: 0
   - noteName: 1
     octave: 4
+    isSharp: 0
+    isFlat: 0
   - noteName: 2
     octave: 4
+    isSharp: 0
+    isFlat: 0
   - noteName: 3
     octave: 4
+    isSharp: 0
+    isFlat: 0
   - noteName: 4
     octave: 4
+    isSharp: 0
+    isFlat: 0
   - noteName: 5
     octave: 4
+    isSharp: 0
+    isFlat: 0
   - noteName: 6
     octave: 4
+    isSharp: 0
+    isFlat: 0
   - noteName: 0
     octave: 5
+    isSharp: 0
+    isFlat: 0
   - noteName: 1
     octave: 5
+    isSharp: 0
+    isFlat: 0
   - noteName: 2
     octave: 5
+    isSharp: 0
+    isFlat: 0
   - noteName: 3
     octave: 5
+    isSharp: 0
+    isFlat: 0
   - noteName: 4
     octave: 5
+    isSharp: 0
+    isFlat: 0
   - noteName: 5
     octave: 5
+    isSharp: 0
+    isFlat: 0
   bassClefNotes:
   - noteName: 2
     octave: 2
+    isSharp: 0
+    isFlat: 0
   - noteName: 3
     octave: 2
+    isSharp: 0
+    isFlat: 0
   - noteName: 4
     octave: 2
+    isSharp: 0
+    isFlat: 0
   - noteName: 5
     octave: 2
+    isSharp: 0
+    isFlat: 0
   - noteName: 6
     octave: 2
+    isSharp: 0
+    isFlat: 0
   - noteName: 0
     octave: 3
+    isSharp: 0
+    isFlat: 0
   - noteName: 1
     octave: 3
+    isSharp: 0
+    isFlat: 0
   - noteName: 2
     octave: 3
+    isSharp: 0
+    isFlat: 0
   - noteName: 3
     octave: 3
+    isSharp: 0
+    isFlat: 0
   - noteName: 4
     octave: 3
+    isSharp: 0
+    isFlat: 0
   - noteName: 5
     octave: 3
+    isSharp: 0
+    isFlat: 0
   - noteName: 6
     octave: 3
+    isSharp: 0
+    isFlat: 0
   - noteName: 0
     octave: 4
+    isSharp: 0
+    isFlat: 0
   timePerNote: 4
   notesToComplete: 15
   usesLedgerLines: 1
+  sharpProbability: 0
+  flatProbability: 0

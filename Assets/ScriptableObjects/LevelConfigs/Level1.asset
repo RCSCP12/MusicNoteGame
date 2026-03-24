@@ -17,17 +17,31 @@ MonoBehaviour:
   trebleClefNotes:
   - noteName: 2
     octave: 4
+    isSharp: 0
+    isFlat: 0
   - noteName: 4
     octave: 4
+    isSharp: 0
+    isFlat: 0
   - noteName: 6
     octave: 4
+    isSharp: 0
+    isFlat: 0
   bassClefNotes:
   - noteName: 4
     octave: 2
+    isSharp: 0
+    isFlat: 0
   - noteName: 6
     octave: 2
+    isSharp: 0
+    isFlat: 0
   - noteName: 1
     octave: 3
+    isSharp: 0
+    isFlat: 0
   timePerNote: 10
   notesToComplete: 5
   usesLedgerLines: 0
+  sharpProbability: 0
+  flatProbability: 0
