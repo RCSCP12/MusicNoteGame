@@ -26,18 +26,47 @@ namespace MusicNoteGame.UI
         public void DisplayNotes(List<NoteData> notes, ClefType clef)
         {
             currentNotes = notes;
-            
+
             // cleanup old clones
             foreach(var clone in clonedNotes) if (clone != null) Destroy(clone);
             clonedNotes.Clear();
-            
+
             staffDisplay.ClearLedgerLines();
+
+            // Pre-calculate Y positions then resolve X offsets for overlapping notes.
+            // When two notes are closer vertically than the note oval's height, the
+            // upper note shifts right (standard notation convention).
+            const float NoteOvalH  = 28f;
+            const float NoteOvalW  = 40f;
+            const float RightShift = NoteOvalW + 4f; // pixels to shift a displaced note
+
+            float baseX = noteTransform.anchoredPosition.x;
+
+            float[] yPos = new float[notes.Count];
+            int[]   staffPos = new int[notes.Count];
+            for (int i = 0; i < notes.Count; i++)
+            {
+                staffPos[i] = notes[i].GetStaffPosition(clef);
+                yPos[i] = staffDisplay.GetYPositionForStaffPosition(staffPos[i]);
+            }
+
+            // Build bottom-to-top sorted order
+            int[] order = new int[notes.Count];
+            for (int i = 0; i < notes.Count; i++) order[i] = i;
+            System.Array.Sort(order, (a, b) => yPos[a].CompareTo(yPos[b]));
+
+            float[] xOff = new float[notes.Count]; // default = 0 (left column)
+            for (int j = 1; j < order.Length; j++)
+            {
+                int prev = order[j - 1];
+                int curr = order[j];
+                if (Mathf.Abs(yPos[curr] - yPos[prev]) < NoteOvalH)
+                    xOff[curr] = xOff[prev] == 0f ? RightShift : 0f; // alternate columns
+            }
 
             for(int i = 0; i < notes.Count; i++)
             {
                 var note = notes[i];
-                int staffPosition = note.GetStaffPosition(clef);
-                float yPosition = staffDisplay.GetYPositionForStaffPosition(staffPosition);
 
                 RectTransform targetTransform;
                 Image targetImage;
@@ -54,7 +83,7 @@ namespace MusicNoteGame.UI
                     GameObject cloneObj = Instantiate(gameObject, transform.parent);
                     Destroy(cloneObj.GetComponent<NoteDisplay>());
                     clonedNotes.Add(cloneObj);
-                    
+
                     targetTransform = cloneObj.GetComponent<RectTransform>();
                     targetImage = cloneObj.GetComponent<Image>();
 
@@ -68,10 +97,10 @@ namespace MusicNoteGame.UI
                     }
                 }
 
-                targetTransform.anchoredPosition = new Vector2(noteTransform.anchoredPosition.x, yPosition);
+                targetTransform.anchoredPosition = new Vector2(baseX + xOff[i], yPos[i]);
 
                 if (note.NeedsLedgerLines(clef))
-                    staffDisplay.ShowLedgerLines(staffPosition, targetTransform.anchoredPosition.x);
+                    staffDisplay.ShowLedgerLines(staffPos[i], targetTransform.anchoredPosition.x);
 
                 if (targetAccidental != null)
                 {
