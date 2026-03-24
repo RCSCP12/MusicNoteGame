@@ -49,7 +49,21 @@ namespace MusicNoteGame.Core
 
         private void Start()
         {
+            ValidateDependencies();
             SetupEventListeners();
+        }
+
+        private bool ValidateDependencies()
+        {
+            bool valid = true;
+            if (noteGenerator == null) { Debug.LogError("GameManager: noteGenerator is not assigned."); valid = false; }
+            if (inputHandler  == null) { Debug.LogError("GameManager: inputHandler is not assigned.");  valid = false; }
+            if (noteDisplay   == null) { Debug.LogError("GameManager: noteDisplay is not assigned.");   valid = false; }
+            if (staffDisplay  == null) { Debug.LogError("GameManager: staffDisplay is not assigned.");  valid = false; }
+            if (scoreManager  == null) { Debug.LogError("GameManager: scoreManager is not assigned.");  valid = false; }
+            if (levelManager  == null) { Debug.LogError("GameManager: levelManager is not assigned.");  valid = false; }
+            if (gameOverPanel == null) { Debug.LogError("GameManager: gameOverPanel is not assigned."); valid = false; }
+            return valid;
         }
 
         private void SetupEventListeners()
@@ -76,7 +90,7 @@ namespace MusicNoteGame.Core
             CurrentClef = clef;
             CurrentMode = mode;
             CurrentDifficulty = difficulty;
-            chordsEnabled = PlayerPrefs.GetInt("ChordsEnabled", 0) == 1;
+            chordsEnabled = PlayerPrefs.GetInt(PlayerPrefsKeys.ChordsEnabled, 0) == 1;
 
             gameOverPanel?.Hide();
             noteDisplay?.gameObject.SetActive(true);
@@ -99,6 +113,11 @@ namespace MusicNoteGame.Core
 
             // Use first level config for notes
             var levelConfig = levelManager.CurrentLevel;
+            if (levelConfig == null)
+            {
+                Debug.LogError("GameManager: No level config available — cannot start game.");
+                return;
+            }
             noteGenerator.Initialize(levelConfig, CurrentClef);
 
             hudController?.UpdateLevel(CurrentDifficulty + 1, levelManager.TotalLevels);

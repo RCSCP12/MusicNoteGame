@@ -17,6 +17,12 @@ namespace MusicNoteGame.Gameplay
 
         public void Initialize(int startingLevelIndex = 0)
         {
+            if (levels.Count == 0)
+            {
+                Debug.LogError("LevelManager: No levels configured!");
+                CurrentLevelIndex = 0;
+                return;
+            }
             CurrentLevelIndex = Mathf.Clamp(startingLevelIndex, 0, levels.Count - 1);
         }
 

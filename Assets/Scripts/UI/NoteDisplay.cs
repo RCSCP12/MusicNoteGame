@@ -57,9 +57,15 @@ namespace MusicNoteGame.UI
                     
                     targetTransform = cloneObj.GetComponent<RectTransform>();
                     targetImage = cloneObj.GetComponent<Image>();
-                    
+
                     // The accidental text is a child of the note gameobject in this structure
                     targetAccidental = cloneObj.GetComponentInChildren<TMPro.TextMeshProUGUI>(true);
+
+                    if (targetTransform == null)
+                    {
+                        Debug.LogError("NoteDisplay: Cloned note is missing RectTransform — skipping.");
+                        continue;
+                    }
                 }
 
                 targetTransform.anchoredPosition = new Vector2(noteTransform.anchoredPosition.x, yPosition);

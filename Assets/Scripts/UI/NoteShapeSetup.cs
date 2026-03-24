@@ -6,10 +6,13 @@ namespace MusicNoteGame.UI
     [RequireComponent(typeof(Image))]
     public class NoteShapeSetup : MonoBehaviour
     {
+        [SerializeField] private int noteWidth = 40;
+        [SerializeField] private int noteHeight = 28;
+
         private void Awake()
         {
             var image = GetComponent<Image>();
-            image.sprite = CreateOvalSprite(40, 28);
+            image.sprite = CreateOvalSprite(noteWidth, noteHeight);
             image.color = Color.black;
         }
 

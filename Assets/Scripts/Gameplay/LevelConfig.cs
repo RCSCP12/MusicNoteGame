@@ -23,6 +23,15 @@ namespace MusicNoteGame.Gameplay
         [Range(0f, 1f)] public float sharpProbability = 0f;
         [Range(0f, 1f)] public float flatProbability = 0f;
 
+        private void OnValidate()
+        {
+            if (sharpProbability + flatProbability > 1f)
+            {
+                Debug.LogWarning($"LevelConfig '{name}': sharpProbability + flatProbability exceeds 1.0. Clamping flatProbability.");
+                flatProbability = Mathf.Clamp01(1f - sharpProbability);
+            }
+        }
+
         public List<NoteData> GetNotesForClef(ClefType clef)
         {
             var notes = new List<NoteData>();

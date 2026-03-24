@@ -27,6 +27,7 @@ namespace MusicNoteGame.UI
         [SerializeField] private Image timerFill;
         [SerializeField] private Color normalColor = Color.green;
         [SerializeField] private Color warningColor = Color.red;
+        [SerializeField] [Range(0f, 1f)] private float warningThreshold = 0.3f;
 
         [Header("Feedback")]
         [SerializeField] private TextMeshProUGUI feedbackText;
@@ -115,7 +116,7 @@ namespace MusicNoteGame.UI
             if (timerFill)
             {
                 float pct = max > 0 ? remaining / max : 1f;
-                timerFill.color = pct <= 0.3f ? warningColor : normalColor;
+                timerFill.color = pct <= warningThreshold ? warningColor : normalColor;
             }
         }
 

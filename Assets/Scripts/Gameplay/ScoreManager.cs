@@ -57,13 +57,12 @@ namespace MusicNoteGame.Gameplay
 
         public int GetHighScore(ClefType clef, int difficulty)
         {
-            string key = $"HighScore_{clef}_{difficulty}";
-            return PlayerPrefs.GetInt(key, 0);
+            return PlayerPrefs.GetInt(Core.PlayerPrefsKeys.HighScore(clef, difficulty), 0);
         }
 
         public bool SaveHighScoreIfBetter(ClefType clef, int difficulty)
         {
-            string key = $"HighScore_{clef}_{difficulty}";
+            string key = Core.PlayerPrefsKeys.HighScore(clef, difficulty);
             if (TotalScore > PlayerPrefs.GetInt(key, 0))
             {
                 PlayerPrefs.SetInt(key, TotalScore);

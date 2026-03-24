@@ -35,6 +35,9 @@ namespace MusicNoteGame.UI
         [SerializeField] private Image hardHighlight;
         [SerializeField] private TextMeshProUGUI difficultyDescText;
 
+        [Header("Level Configs")]
+        [SerializeField] private Gameplay.LevelConfig[] levelConfigs;
+
         [Header("Start")]
         [SerializeField] private Button startButton;
 
@@ -101,32 +104,30 @@ namespace MusicNoteGame.UI
             // Difficulty description
             if (difficultyDescText)
             {
-                difficultyDescText.text = selectedDifficulty switch
+                if (levelConfigs != null && selectedDifficulty < levelConfigs.Length && levelConfigs[selectedDifficulty] != null)
                 {
-                    0 => "Level 1: 5 notes, 15 sec timer",
-                    1 => "Level 2: 10 notes, 10 sec timer",
-                    2 => "Level 3: 15 notes, 5 sec timer",
-                    _ => ""
-                };
+                    var cfg = levelConfigs[selectedDifficulty];
+                    difficultyDescText.text = $"{cfg.levelName}: {cfg.notesToComplete} notes, {cfg.timePerNote:0} sec timer";
+                }
+                else
+                {
+                    difficultyDescText.text = "";
+                }
             }
         }
 
         private void LoadHighScores()
         {
-            // Update keys to match ScoreManager: HighScore_{Clef}_{Difficulty}
-            string trebleKey = $"HighScore_{ClefType.Treble}_{selectedDifficulty}";
-            string bassKey = $"HighScore_{ClefType.Bass}_{selectedDifficulty}";
-            
-            if (trebleHighScoreText) trebleHighScoreText.text = $"High Score: {PlayerPrefs.GetInt(trebleKey, 0)}";
-            if (bassHighScoreText) bassHighScoreText.text = $"High Score: {PlayerPrefs.GetInt(bassKey, 0)}";
+            if (trebleHighScoreText) trebleHighScoreText.text = $"High Score: {PlayerPrefs.GetInt(PlayerPrefsKeys.HighScore(ClefType.Treble, selectedDifficulty), 0)}";
+            if (bassHighScoreText) bassHighScoreText.text = $"High Score: {PlayerPrefs.GetInt(PlayerPrefsKeys.HighScore(ClefType.Bass, selectedDifficulty), 0)}";
         }
 
         public void StartGame()
         {
-            PlayerPrefs.SetInt("SelectedClef", (int)selectedClef);
-            PlayerPrefs.SetInt("SelectedMode", (int)selectedMode);
-            PlayerPrefs.SetInt("SelectedDifficulty", selectedDifficulty);
-            PlayerPrefs.SetInt("ChordsEnabled", chordsEnabled ? 1 : 0);
+            PlayerPrefs.SetInt(PlayerPrefsKeys.SelectedClef, (int)selectedClef);
+            PlayerPrefs.SetInt(PlayerPrefsKeys.SelectedMode, (int)selectedMode);
+            PlayerPrefs.SetInt(PlayerPrefsKeys.SelectedDifficulty, selectedDifficulty);
+            PlayerPrefs.SetInt(PlayerPrefsKeys.ChordsEnabled, chordsEnabled ? 1 : 0);
             SceneManager.LoadScene(1, LoadSceneMode.Single);
         }
     }

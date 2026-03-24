@@ -8,22 +8,7 @@ namespace MusicNoteGame.Audio
     public class NoteAudioPlayer : MonoBehaviour
     {
         private static NoteAudioPlayer instance;
-        public static NoteAudioPlayer Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = FindFirstObjectByType<NoteAudioPlayer>();
-                    if (instance == null)
-                    {
-                        GameObject go = new GameObject("NoteAudioPlayer");
-                        instance = go.AddComponent<NoteAudioPlayer>();
-                    }
-                }
-                return instance;
-            }
-        }
+        public static NoteAudioPlayer Instance => instance;
 
         [SerializeField] private float volume = 0.5f;
         [SerializeField] private float duration = 0.5f;

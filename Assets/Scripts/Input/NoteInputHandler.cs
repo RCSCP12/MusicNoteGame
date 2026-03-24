@@ -15,9 +15,9 @@ namespace MusicNoteGame.Input
         public bool IsEnabled { get; private set; } = true;
 
         /// <summary>True while CapsLock is held down.</summary>
-        public bool IsFlatActive => Keyboard.current.capsLockKey.isPressed;
+        public bool IsFlatActive => Keyboard.current != null && Keyboard.current.capsLockKey.isPressed;
 
-        public bool IsSharpActive => Keyboard.current.leftShiftKey.isPressed || Keyboard.current.rightShiftKey.isPressed;
+        public bool IsSharpActive => Keyboard.current != null && (Keyboard.current.leftShiftKey.isPressed || Keyboard.current.rightShiftKey.isPressed);
 
         public void EnableInput() => IsEnabled = true;
         public void DisableInput()
@@ -28,6 +28,7 @@ namespace MusicNoteGame.Input
         private void Update()
         {
             if (!IsEnabled) return;
+            if (Keyboard.current == null) return;
 
             // Note keys A–G
             if (Keyboard.current.aKey.wasPressedThisFrame)
